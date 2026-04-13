@@ -47,7 +47,7 @@ const Layout = () => {
     const swithRoute = (path) => {
         navigate(path)
     }
-
+    
     return (
         <div className="layout">
             <div className="container">
