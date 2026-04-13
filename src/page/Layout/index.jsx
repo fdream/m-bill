@@ -1,5 +1,6 @@
 //一级路由
 import { Link, Outlet } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 //状态管理相关
 import { useSelector, useDispatch } from 'react-redux'
 import { getBillList } from '@/store/models/billstore'
@@ -12,6 +13,7 @@ import {
     CalculatorOutline,
     AddCircleOutline
 } from 'antd-mobile-icons'
+
 
 const tabs = [
     {
@@ -40,13 +42,19 @@ const Layout = () => {
         dispatch(getBillList())
     }, [dispatch])
 
+    // 切换菜单跳转路由
+    const navigate = useNavigate()
+    const swithRoute = (path) => {
+        navigate(path)
+    }
+
     return (
         <div className="layout">
             <div className="container">
                 <Outlet />
             </div>
             <div className="footer">
-                <TabBar>
+                <TabBar onChange={swithRoute}>                {/* 传输key值 */}
                     {tabs.map(item => (
                         <TabBar.Item key={item.key} icon={item.icon} title={item.title} />
                     ))}
