@@ -2,6 +2,10 @@ import classNames from 'classnames'
 import './index.scss'
 import { useMemo, useState } from 'react'
 import { billTypeToName } from '@/contants'
+import Icon from '@/components/icon'
+
+
+
 const DailyBill = ({ date, billList }) => {//传的是整体对象需要解构赋值直接拿
     //1.计算单日统计结果
     const dayResult = useMemo(() => {
@@ -47,6 +51,7 @@ const DailyBill = ({ date, billList }) => {//传的是整体对象需要解构�
                 {billList.map(item => {
                     return (
                         <div className="bill" key={item.id}>
+                            <Icon type={item.useFor} />
                             <div className="detail">
                                 <div className="billType">{billTypeToName[item.useFor]}</div>
                             </div>
