@@ -8,22 +8,25 @@ import dayjs from 'dayjs'
 import classNames from 'classnames'
 //lodash
 import _ from 'lodash'
+//日账单组件
+import DailyBill from './components/DailyBill'
 
 const Month = () => {
-    //时间选择器显示-状态管理
+    //时间选择器显示-状态变量
     const [dateVisible, setDateVisible] = useState(false)
-    //获取当前月份-状态管理
+    //获取当前月份-状态变量
     const [currentDate, setCurrentDate] = useState(
         () => dayjs(new Date()).format('YYYY-MM')
     )
 
-    //1.按月做账单分组
+    //获取账单列表-状态管理
     const billList = useSelector((state) => state.bill.billList)
-    const billGroup = useMemo(() => {
+    //1.账单列表按月分组
+    const billGroupWithMonth = useMemo(() => {
         return _.groupBy(billList, (item) => dayjs(item.date).format('YYYY-MM'))
     }, [billList])
 
-    //2.当前月份的账单分组-状态管理
+    //2.当前月份的账单列表-状态管理
     const [currentBillList, setCurrentBillList] = useState([])
     //3.计算当前月份的账单统计结果
     const monthResult = useMemo(() => {
@@ -36,21 +39,34 @@ const Month = () => {
             total: income + pay
         }
     }, [currentBillList])
-    //初始化当前月份的账单分组
+
+    //初始化当前月份的账单
     useEffect(() => {
         const nowDate=dayjs().format('YYYY-MM')
-        if(billGroup[nowDate]){
-            setCurrentBillList(billGroup[nowDate])
+        if(billGroupWithMonth[nowDate]){
+            setCurrentBillList(billGroupWithMonth[nowDate])
         }
-    }, [billGroup])
+    }, [billGroupWithMonth])
 
     //时间选择器确认回调
     const onConfirm = (date) => {
         setDateVisible(false)
         const formatDate = dayjs(date).format('YYYY-MM')
         setCurrentDate(formatDate)//设置当前时间
-        setCurrentBillList(billGroup[formatDate] || [])//对象取值[]根据月份获取当月账单列表
+        setCurrentBillList(billGroupWithMonth[formatDate] || [])//对象取值[]根据月份获取当月账单列表
     }
+    //1.账单列表按日分组
+    const billGroupWithDay = useMemo(() => {
+        const dateWithDay = _.groupBy(currentBillList, (item) => dayjs(item.date).format('YYYY-MM-DD'))
+        const keys = Object.keys(dateWithDay)//Object.keys
+        keys.sort((a,b) => dayjs(a).diff(dayjs(b)))
+        return {
+            dateWithDay,
+            keys
+        }
+    }, [currentBillList])
+
+
     return (
         <div className="monthlyBill">
             <NavBar className="nav" backArrow={false}>
@@ -94,6 +110,10 @@ const Month = () => {
                         max={new Date()}
                     />
                 </div>
+                {/* 日账单组件 */}
+                {billGroupWithDay.keys.map((key) => (
+                    <DailyBill key={key} date={key} billList={billGroupWithDay.dateWithDay[key]} />
+                ))}
             </div>
         </div >
     )
