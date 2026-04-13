@@ -8,3 +8,5 @@
 ps：vite严格区分js和jsx文件
 
 4️⃣添加主题配置 antd-mobile 的主题
+
+5️⃣添加账单状态管理Redux Toolkit
