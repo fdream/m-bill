@@ -71,12 +71,12 @@ const Month = () => {
             <div className="content">
                 <div className="header">
                     {/* 时间切换区域 */}
-                    <div className="date" onClick={() => setDateVisible(true)}>
+                    <div className="date" >
                         <span className="text">
                             {currentDate}
                         </span>
                         {/* 时间切换器箭头-类名控制 */}
-                        <span className={classNames('arrow',dateVisible&&'expand')}></span>
+                        <span className={classNames('arrow', dateVisible && 'expand')} onClick={() => setDateVisible(true)}></span>
                     </div>
                     {/* 统计区域 */}
                     <div className='twoLineOverview'>
@@ -97,8 +97,8 @@ const Month = () => {
                     <DatePicker
                         className="kaDate"
                         title="记账日期"
-                        precision="month"
-                        visible={dateVisible}
+                        precision="month" //时间选择器精度-月
+                        visible={dateVisible} //时间选择器是否显示
                         onConfirm={onConfirm}
                         onCancel={() => setDateVisible(false)}
                         onClose={() => setDateVisible(false)}
