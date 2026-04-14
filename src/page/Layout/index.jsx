@@ -35,8 +35,6 @@ const tabs = [
 
 const Layout = () => {
     //获取账单列表
-    const billList = useSelector((state) => state.bill.billList)
-    //获取账单列表
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(getBillList())
